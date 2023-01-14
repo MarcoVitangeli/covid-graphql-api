@@ -19,7 +19,10 @@ func (r *queryResolver) FindCases(ctx context.Context, input *model.CaseSearch) 
 // FindByID is the resolver for the findById field.
 func (r *queryResolver) FindByID(ctx context.Context, id *int) (*cases.Case, error) {
 	c, err := r.Resolver.srv.Get(ctx, *id)
-	return &c, err
+	if err != nil {
+		return nil, err
+	}
+	return &c, nil
 }
 
 // Query returns QueryResolver implementation.
