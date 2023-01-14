@@ -11,6 +11,7 @@ import (
 
 type service interface {
 	Get(ctx context.Context, id int) (cases.Case, error)
+	Find(ctx context.Context, query *cases.CaseSearch) ([]*cases.Case, error)
 }
 type Resolver struct {
 	srv service

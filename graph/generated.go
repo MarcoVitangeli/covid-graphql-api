@@ -14,7 +14,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/MarcoVitangeli/covid-graphql-api/graph/model"
 	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
@@ -57,12 +56,12 @@ type ComplexityRoot struct {
 
 	Query struct {
 		FindByID  func(childComplexity int, id *int) int
-		FindCases func(childComplexity int, input *model.CaseSearch) int
+		FindCases func(childComplexity int, input *cases.CaseSearch) int
 	}
 }
 
 type QueryResolver interface {
-	FindCases(ctx context.Context, input *model.CaseSearch) ([]*cases.Case, error)
+	FindCases(ctx context.Context, input *cases.CaseSearch) ([]*cases.Case, error)
 	FindByID(ctx context.Context, id *int) (*cases.Case, error)
 }
 
@@ -152,7 +151,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.FindCases(childComplexity, args["input"].(*model.CaseSearch)), true
+		return e.complexity.Query.FindCases(childComplexity, args["input"].(*cases.CaseSearch)), true
 
 	}
 	return 0, false
@@ -260,10 +259,10 @@ func (ec *executionContext) field_Query_findById_args(ctx context.Context, rawAr
 func (ec *executionContext) field_Query_findCases_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *model.CaseSearch
+	var arg0 *cases.CaseSearch
 	if tmp, ok := rawArgs["input"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("input"))
-		arg0, err = ec.unmarshalOCaseSearch2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋgraphᚋmodelᚐCaseSearch(ctx, tmp)
+		arg0, err = ec.unmarshalOCaseSearch2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋinternalᚋcasesᚐCaseSearch(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -632,7 +631,7 @@ func (ec *executionContext) _Query_findCases(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().FindCases(rctx, fc.Args["input"].(*model.CaseSearch))
+		return ec.resolvers.Query().FindCases(rctx, fc.Args["input"].(*cases.CaseSearch))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2659,8 +2658,8 @@ func (ec *executionContext) fieldContext___Type_specifiedByURL(ctx context.Conte
 
 // region    **************************** input.gotpl *****************************
 
-func (ec *executionContext) unmarshalInputCaseSearch(ctx context.Context, obj interface{}) (model.CaseSearch, error) {
-	var it model.CaseSearch
+func (ec *executionContext) unmarshalInputCaseSearch(ctx context.Context, obj interface{}) (cases.CaseSearch, error) {
+	var it cases.CaseSearch
 	asMap := map[string]interface{}{}
 	for k, v := range obj.(map[string]interface{}) {
 		asMap[k] = v
@@ -3577,7 +3576,7 @@ func (ec *executionContext) marshalOCase2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovi
 	return ec._Case(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOCaseSearch2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋgraphᚋmodelᚐCaseSearch(ctx context.Context, v interface{}) (*model.CaseSearch, error) {
+func (ec *executionContext) unmarshalOCaseSearch2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋinternalᚋcasesᚐCaseSearch(ctx context.Context, v interface{}) (*cases.CaseSearch, error) {
 	if v == nil {
 		return nil, nil
 	}

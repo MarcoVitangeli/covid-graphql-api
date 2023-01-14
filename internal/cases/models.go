@@ -9,3 +9,12 @@ type Case struct {
 	Stage        string
 	Dead         string
 }
+
+type CaseSearch struct {
+	Province     *string
+	Age          *int
+	Stage        *string
+	Dead         *string
+	Neighborhood *string
+	Gender       *string
+}

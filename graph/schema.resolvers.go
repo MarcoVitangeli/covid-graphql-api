@@ -7,13 +7,12 @@ package graph
 import (
 	"context"
 
-	"github.com/MarcoVitangeli/covid-graphql-api/graph/model"
 	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
 )
 
 // FindCases is the resolver for the findCases field.
-func (r *queryResolver) FindCases(ctx context.Context, input *model.CaseSearch) ([]*cases.Case, error) {
-	return nil, nil
+func (r *queryResolver) FindCases(ctx context.Context, input *cases.CaseSearch) ([]*cases.Case, error) {
+	return r.Resolver.srv.Find(ctx, input)
 }
 
 // FindByID is the resolver for the findById field.
