@@ -1,0 +1,27 @@
+# GraphQL schema example
+#
+# https://gqlgen.com/getting-started/
+
+type Case {
+    id: String!
+    province: String!
+    gender: String!
+    neighborhood: String!
+    age: Int!
+    stage: String!
+    dead: String!
+}
+
+input CaseSearch {
+    province: String
+    age: Int
+    stage: String
+    dead: String
+    neighborhood: String
+    gender: String
+}
+
+type Query {
+    findCases(input: CaseSearch): [Case]!
+    findById(id: Int): Case
+}
