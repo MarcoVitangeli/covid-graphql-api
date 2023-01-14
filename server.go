@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/platform/database"
 	"log"
 	"net/http"
 	"os"
@@ -8,20 +11,36 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/MarcoVitangeli/covid-graphql-api/graph"
+	"github.com/joho/godotenv"
 )
 
 const defaultPort = "8080"
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(fmt.Errorf("error loading .env file: %w", err))
+	}
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{}}))
+	db, err := database.New(os.Getenv("MYSQL_DNS"))
+
+	if err != nil {
+		panic(err)
+	}
+
+	service := cases.NewService(db)
+
+	resolver := graph.NewResolver(service)
+
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
 
+	log.Println("starting server...")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

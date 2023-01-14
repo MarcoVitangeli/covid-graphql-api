@@ -2,16 +2,6 @@
 
 package model
 
-type Case struct {
-	ID           string `json:"id"`
-	Province     string `json:"province"`
-	Gender       string `json:"gender"`
-	Neighborhood string `json:"neighborhood"`
-	Age          int    `json:"age"`
-	Stage        string `json:"stage"`
-	Dead         string `json:"dead"`
-}
-
 type CaseSearch struct {
 	Province     *string `json:"province"`
 	Age          *int    `json:"age"`

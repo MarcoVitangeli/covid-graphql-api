@@ -15,6 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/MarcoVitangeli/covid-graphql-api/graph/model"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -61,8 +62,8 @@ type ComplexityRoot struct {
 }
 
 type QueryResolver interface {
-	FindCases(ctx context.Context, input *model.CaseSearch) ([]*model.Case, error)
-	FindByID(ctx context.Context, id *int) (*model.Case, error)
+	FindCases(ctx context.Context, input *model.CaseSearch) ([]*cases.Case, error)
+	FindByID(ctx context.Context, id *int) (*cases.Case, error)
 }
 
 type executableSchema struct {
@@ -309,7 +310,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Case_id(ctx context.Context, field graphql.CollectedField, obj *model.Case) (ret graphql.Marshaler) {
+func (ec *executionContext) _Case_id(ctx context.Context, field graphql.CollectedField, obj *cases.Case) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Case_id(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -353,7 +354,7 @@ func (ec *executionContext) fieldContext_Case_id(ctx context.Context, field grap
 	return fc, nil
 }
 
-func (ec *executionContext) _Case_province(ctx context.Context, field graphql.CollectedField, obj *model.Case) (ret graphql.Marshaler) {
+func (ec *executionContext) _Case_province(ctx context.Context, field graphql.CollectedField, obj *cases.Case) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Case_province(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -397,7 +398,7 @@ func (ec *executionContext) fieldContext_Case_province(ctx context.Context, fiel
 	return fc, nil
 }
 
-func (ec *executionContext) _Case_gender(ctx context.Context, field graphql.CollectedField, obj *model.Case) (ret graphql.Marshaler) {
+func (ec *executionContext) _Case_gender(ctx context.Context, field graphql.CollectedField, obj *cases.Case) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Case_gender(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -441,7 +442,7 @@ func (ec *executionContext) fieldContext_Case_gender(ctx context.Context, field 
 	return fc, nil
 }
 
-func (ec *executionContext) _Case_neighborhood(ctx context.Context, field graphql.CollectedField, obj *model.Case) (ret graphql.Marshaler) {
+func (ec *executionContext) _Case_neighborhood(ctx context.Context, field graphql.CollectedField, obj *cases.Case) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Case_neighborhood(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -485,7 +486,7 @@ func (ec *executionContext) fieldContext_Case_neighborhood(ctx context.Context, 
 	return fc, nil
 }
 
-func (ec *executionContext) _Case_age(ctx context.Context, field graphql.CollectedField, obj *model.Case) (ret graphql.Marshaler) {
+func (ec *executionContext) _Case_age(ctx context.Context, field graphql.CollectedField, obj *cases.Case) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Case_age(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -529,7 +530,7 @@ func (ec *executionContext) fieldContext_Case_age(ctx context.Context, field gra
 	return fc, nil
 }
 
-func (ec *executionContext) _Case_stage(ctx context.Context, field graphql.CollectedField, obj *model.Case) (ret graphql.Marshaler) {
+func (ec *executionContext) _Case_stage(ctx context.Context, field graphql.CollectedField, obj *cases.Case) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Case_stage(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -573,7 +574,7 @@ func (ec *executionContext) fieldContext_Case_stage(ctx context.Context, field g
 	return fc, nil
 }
 
-func (ec *executionContext) _Case_dead(ctx context.Context, field graphql.CollectedField, obj *model.Case) (ret graphql.Marshaler) {
+func (ec *executionContext) _Case_dead(ctx context.Context, field graphql.CollectedField, obj *cases.Case) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Case_dead(ctx, field)
 	if err != nil {
 		return graphql.Null
@@ -643,9 +644,9 @@ func (ec *executionContext) _Query_findCases(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Case)
+	res := resTmp.([]*cases.Case)
 	fc.Result = res
-	return ec.marshalNCase2ᚕᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋgraphᚋmodelᚐCase(ctx, field.Selections, res)
+	return ec.marshalNCase2ᚕᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋinternalᚋcasesᚐCase(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_findCases(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -711,9 +712,9 @@ func (ec *executionContext) _Query_findById(ctx context.Context, field graphql.C
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.Case)
+	res := resTmp.(*cases.Case)
 	fc.Result = res
-	return ec.marshalOCase2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋgraphᚋmodelᚐCase(ctx, field.Selections, res)
+	return ec.marshalOCase2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋinternalᚋcasesᚐCase(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) fieldContext_Query_findById(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -2736,7 +2737,7 @@ func (ec *executionContext) unmarshalInputCaseSearch(ctx context.Context, obj in
 
 var caseImplementors = []string{"Case"}
 
-func (ec *executionContext) _Case(ctx context.Context, sel ast.SelectionSet, obj *model.Case) graphql.Marshaler {
+func (ec *executionContext) _Case(ctx context.Context, sel ast.SelectionSet, obj *cases.Case) graphql.Marshaler {
 	fields := graphql.CollectFields(ec.OperationContext, sel, caseImplementors)
 	out := graphql.NewFieldSet(fields)
 	var invalids uint32
@@ -3222,7 +3223,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNCase2ᚕᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋgraphᚋmodelᚐCase(ctx context.Context, sel ast.SelectionSet, v []*model.Case) graphql.Marshaler {
+func (ec *executionContext) marshalNCase2ᚕᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋinternalᚋcasesᚐCase(ctx context.Context, sel ast.SelectionSet, v []*cases.Case) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -3246,7 +3247,7 @@ func (ec *executionContext) marshalNCase2ᚕᚖgithubᚗcomᚋMarcoVitangeliᚋc
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOCase2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋgraphᚋmodelᚐCase(ctx, sel, v[i])
+			ret[i] = ec.marshalOCase2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋinternalᚋcasesᚐCase(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3569,7 +3570,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return res
 }
 
-func (ec *executionContext) marshalOCase2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋgraphᚋmodelᚐCase(ctx context.Context, sel ast.SelectionSet, v *model.Case) graphql.Marshaler {
+func (ec *executionContext) marshalOCase2ᚖgithubᚗcomᚋMarcoVitangeliᚋcovidᚑgraphqlᚑapiᚋinternalᚋcasesᚐCase(ctx context.Context, sel ast.SelectionSet, v *cases.Case) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

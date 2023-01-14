@@ -6,33 +6,20 @@ package graph
 
 import (
 	"context"
+
 	"github.com/MarcoVitangeli/covid-graphql-api/graph/model"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
 )
 
 // FindCases is the resolver for the findCases field.
-func (r *queryResolver) FindCases(ctx context.Context, input *model.CaseSearch) ([]*model.Case, error) {
-	return []*model.Case{&model.Case{
-		ID:           "1234",
-		Province:     "CABA",
-		Gender:       "MALE",
-		Neighborhood: "La Boca",
-		Age:          20,
-		Stage:        "CONFIRMADO",
-		Dead:         "SI",
-	}}, nil
+func (r *queryResolver) FindCases(ctx context.Context, input *model.CaseSearch) ([]*cases.Case, error) {
+	return nil, nil
 }
 
 // FindByID is the resolver for the findById field.
-func (r *queryResolver) FindByID(ctx context.Context, id *int) (*model.Case, error) {
-	return &model.Case{
-		ID:           "1234",
-		Province:     "CABA",
-		Gender:       "MALE",
-		Neighborhood: "La Boca",
-		Age:          20,
-		Stage:        "CONFIRMADO",
-		Dead:         "SI",
-	}, nil
+func (r *queryResolver) FindByID(ctx context.Context, id *int) (*cases.Case, error) {
+	c, err := r.Resolver.srv.Get(ctx, *id)
+	return &c, err
 }
 
 // Query returns QueryResolver implementation.
