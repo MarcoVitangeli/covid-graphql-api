@@ -1,6 +1,6 @@
 # Covid-19 GraphQL API
 
-This API serves as a graphql server, that returns data fetched from the covid cases dataset of Buenos Aires ,Argentina.
+This API serves as a graphql server, that returns data fetched from the covid cases dataset of Buenos Aires, Argentina.
 
 It has two main endpoints:
 - `/query` is the endpoint to perform GraphQL queries to the database
