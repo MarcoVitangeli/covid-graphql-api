@@ -11,7 +11,7 @@ import (
 )
 
 type service interface {
-	LoadDataset(ls []string)
+	LoadDataset(ls []string) error
 }
 
 func HandleDataLoad(s service) http.HandlerFunc {
@@ -42,9 +42,12 @@ func HandleDataLoad(s service) http.HandlerFunc {
 			}
 			return
 		}
-		writer.WriteHeader(http.StatusOK)
-
+		code := http.StatusOK
 		ls := strings.Split(string(body), "\n")
-		s.LoadDataset(ls)
+		if err := s.LoadDataset(ls); err != nil {
+			code = http.StatusInternalServerError
+			log.Println(fmt.Errorf("error loading dataset: %w", err))
+		}
+		writer.WriteHeader(code)
 	}
 }
