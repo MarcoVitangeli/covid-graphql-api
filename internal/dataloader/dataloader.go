@@ -1,4 +1,4 @@
-package dataset
+package dataloader
 
 import "database/sql"
 

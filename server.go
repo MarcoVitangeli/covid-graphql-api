@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/MarcoVitangeli/covid-graphql-api/dataset"
 	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/dataloader"
 	"github.com/MarcoVitangeli/covid-graphql-api/internal/platform/database"
 	"log"
 	"net/http"
@@ -42,7 +43,7 @@ func main() {
 	http.Handle("/", playground.Handler("GraphQL playground", "/graphql"))
 	http.Handle("/graphql", srv)
 
-	dService := dataset.NewService(db)
+	dService := dataloader.NewService(db)
 	http.Handle("/load_dataset", dataset.HandleDataLoad(dService))
 
 	log.Println("starting server...")
