@@ -2,16 +2,16 @@ package dataset
 
 import "database/sql"
 
-type DatasetService struct {
+type Service struct {
 	DB *sql.DB
 }
 
-func NewService(db *sql.DB) *DatasetService {
-	return &DatasetService{
+func NewService(db *sql.DB) *Service {
+	return &Service{
 		DB: db,
 	}
 }
 
-func (d *DatasetService) LoadDataset(ls []string) {
+func (d *Service) LoadDataset(ls []string) {
 	//TODO: actually load the dataset
 }
