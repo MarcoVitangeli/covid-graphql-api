@@ -1,6 +1,7 @@
 package dataset
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,7 +12,7 @@ import (
 )
 
 type service interface {
-	LoadDataset(ls []string) error
+	LoadDataset(ctx context.Context, ls []string) error
 }
 
 func HandleDataLoad(s service) http.HandlerFunc {
@@ -44,7 +45,9 @@ func HandleDataLoad(s service) http.HandlerFunc {
 		}
 		code := http.StatusOK
 		ls := strings.Split(string(body), "\n")
-		if err := s.LoadDataset(ls); err != nil {
+		// we ignore the first element of "ls" beacause it is the column names row
+		// we also remove the last one, because it is an empty string
+		if err := s.LoadDataset(request.Context(), ls[1:len(ls)-1]); err != nil {
 			code = http.StatusInternalServerError
 			log.Println(fmt.Errorf("error loading dataset: %w", err))
 		}
