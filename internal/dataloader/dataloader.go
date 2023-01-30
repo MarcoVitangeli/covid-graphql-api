@@ -38,7 +38,20 @@ const (
 	fieldsLen         = 14
 )
 
+func (d *Service) truncateTable(ctx context.Context) error {
+	_, err := d.DB.ExecContext(ctx, "TRUNCATE TABLE cases;")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (d *Service) LoadDataset(ctx context.Context, ls []string) error {
+	err := d.truncateTable(ctx)
+	if err != nil {
+		return err
+	}
+
 	cursor := 0
 	stepSize := 100
 	tx, err := d.DB.Begin()
