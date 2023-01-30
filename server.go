@@ -1,14 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"github.com/MarcoVitangeli/covid-graphql-api/dataset"
-	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
-	"github.com/MarcoVitangeli/covid-graphql-api/internal/dataloader"
-	"github.com/MarcoVitangeli/covid-graphql-api/internal/platform/database"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/MarcoVitangeli/covid-graphql-api/dataset"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/cases"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/dataloader"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/logger"
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/platform/database"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -21,7 +22,8 @@ const defaultPort = "8080"
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal(fmt.Errorf("error loading .env file: %w", err))
+		logger.Error("error loading .env file", err)
+		return
 	}
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -46,6 +48,6 @@ func main() {
 	dService := dataloader.NewService(db)
 	http.Handle("/load_dataset", dataset.HandleDataLoad(dService))
 
-	log.Println("starting server...")
+	logger.Info("starting server")
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+
+	. "github.com/ahmetb/go-linq/v3"
 )
 
 type Service struct {
@@ -35,13 +37,35 @@ const (
 )
 
 func (d *Service) LoadDataset(ctx context.Context, ls []string) error {
+	cursor := 0
+	stepSize := 100
+	tx, err := d.DB.Begin()
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	query := From(ls)
+
+	for {
+		var lss []string
+		query.Skip(cursor).Take(stepSize).ToSlice(&lss)
+		if len(lss) == 0 {
+			tx.Commit()
+			return nil
+		}
+		err = loadDatasetLines(ctx, lss, tx)
+		if err != nil {
+			return err
+		}
+		cursor += stepSize
+	}
+}
+
+func loadDatasetLines(ctx context.Context, ls []string, tx *sql.Tx) error {
 	//TODO: actually load the dataset
 	q := `INSERT INTO cases (id, province, gender, neighborhood, age, stage, dead) VALUES `
 	vals := make([]string, 0, len(ls))
-	for i := 0; i < len(ls); i++ {
-		vals = append(vals, "(?,?,?,?,?,?,?)")
-	}
-	q += strings.Join(vals, ",")
 	argsArr := make([]any, 0, len(ls)*7)
 	for _, l := range ls {
 		fs := strings.Split(l, ";")
@@ -52,6 +76,13 @@ func (d *Service) LoadDataset(ctx context.Context, ls []string) error {
 		if fs[indexDead] == "NA" {
 			dead = "NO"
 		}
+		// we do not process data with no age for convension
+		if fs[indexAge] == "NA" {
+			continue
+		}
+
+		vals = append(vals, "(?,?,?,?,?,?,?)")
+
 		argsArr = append(argsArr,
 			fs[indexId],
 			fs[indexProvince],
@@ -59,9 +90,13 @@ func (d *Service) LoadDataset(ctx context.Context, ls []string) error {
 			fs[indexNeighborhood],
 			fs[indexAge],
 			fs[indexStage],
-			dead)
+			dead,
+		)
 	}
-	stmt, err := d.DB.PrepareContext(ctx, q)
+
+	q += strings.Join(vals, ",")
+
+	stmt, err := tx.PrepareContext(ctx, q)
 	if err != nil {
 		return err
 	}

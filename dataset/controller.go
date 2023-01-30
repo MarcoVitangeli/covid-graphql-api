@@ -3,12 +3,12 @@ package dataset
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/logger"
 )
 
 type service interface {
@@ -28,7 +28,7 @@ func HandleDataLoad(s service) http.HandlerFunc {
 			msg := map[string]string{"message": "error fetching data from dataset"}
 			err := json.NewEncoder(writer).Encode(msg)
 			if err != nil {
-				log.Println(fmt.Errorf("error enconding json body: %w", err))
+				logger.Error("error encoding json body", err)
 			}
 			return
 		}
@@ -39,7 +39,7 @@ func HandleDataLoad(s service) http.HandlerFunc {
 			msg := map[string]string{"message": "error reading response body"}
 			err := json.NewEncoder(writer).Encode(msg)
 			if err != nil {
-				log.Println(fmt.Errorf("error enconding json body: %w", err))
+				logger.Error("error encoding json body", err)
 			}
 			return
 		}
@@ -49,7 +49,7 @@ func HandleDataLoad(s service) http.HandlerFunc {
 		// we also remove the last one, because it is an empty string
 		if err := s.LoadDataset(request.Context(), ls[1:len(ls)-1]); err != nil {
 			code = http.StatusInternalServerError
-			log.Println(fmt.Errorf("error loading dataset: %w", err))
+			logger.Error("error loading dataset", err)
 		}
 		writer.WriteHeader(code)
 	}
