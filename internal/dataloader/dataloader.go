@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/MarcoVitangeli/covid-graphql-api/internal/logger"
 	. "github.com/ahmetb/go-linq/v3"
+	"go.uber.org/zap"
 )
 
 type Service struct {
@@ -51,6 +53,7 @@ func (d *Service) LoadDataset(ctx context.Context, ls []string) error {
 		var lss []string
 		query.Skip(cursor).Take(stepSize).ToSlice(&lss)
 		if len(lss) == 0 {
+			logger.Info("dataset processed succesfully")
 			tx.Commit()
 			return nil
 		}
@@ -93,6 +96,8 @@ func loadDatasetLines(ctx context.Context, ls []string, tx *sql.Tx) error {
 			dead,
 		)
 	}
+
+	logger.Info("data to process", zap.Int("amount", len(vals)))
 
 	q += strings.Join(vals, ",")
 
